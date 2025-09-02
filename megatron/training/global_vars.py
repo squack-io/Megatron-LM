@@ -186,7 +186,7 @@ def _set_wandb_writer(args):
     global _GLOBAL_WANDB_WRITER
     _ensure_var_is_not_initialized(_GLOBAL_WANDB_WRITER,
                                    'wandb writer')
-    if getattr(args, 'wandb_project', '') and args.rank == (args.world_size - 1):
+    if getattr(args, 'wandb_project', ''):
         if args.wandb_exp_name == '':
             raise ValueError("Please specify the wandb experiment name!")
 
@@ -210,7 +210,7 @@ def _set_wandb_writer(args):
         if args.wandb_entity:
             wandb_kwargs['entity'] = args.wandb_entity
         os.makedirs(wandb_kwargs['dir'], exist_ok=True)
-        wandb.init(**wandb_kwargs)
+        wandb.init(group='DDP', **wandb_kwargs)
         _GLOBAL_WANDB_WRITER = wandb
 
 
